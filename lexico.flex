@@ -16,19 +16,20 @@ NL  = \n | \r | \r\n
 
 %%
 
-"$TRACE_ON"  { yyparser.setDebug(true);  }
+"$TRACE_ON"  { yyparser.setDebug(true); }
 "$TRACE_OFF" { yyparser.setDebug(false); }
 
-if { return Parser.IF;}
-do { return Parser.DO; }
-to { return Parser.TO; }
-then { return Parser.THEN;}
-else { return Parser.ELSE;}
-by { return Parser.BY;} 
-endif { return Parser.endif;}
+if { return Parser.IF; }
+else { return Parser.ELSE; }
+while { return Parser.WHILE; }
+and { return Parser.AND; }
+void { return Parser.VOID; }
+int { return Parser.INT; }
+double { return Parser.DOUBLE; }
+boolean { return Parser.BOOLEAN; }
 
-[0-9]+ { return Parser.num;}
-[a-zA-Z][a-zA-Z0-9]* { return Parser.ident;}
+[0-9]+ { return Parser.NUM;}
+[a-zA-Z][a-zA-Z0-9]* { return Parser.ID;}
 
 "{" |
 "}" |

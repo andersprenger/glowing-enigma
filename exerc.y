@@ -3,37 +3,69 @@
 %}
    
 
-%token IF, DO, TO, THEN, ELSE, BY, endif, num, ident
+%token IF, ELSE, WHILE, AND, NUM, ID, VOID, INT, DOUBLE, BOOLEAN
 
 %left '+' '-'
 %left '*' '/'
 
 
 %%
- 
-Prog :  Bloco
-    ;
+Prog : Decl  ListaFuncoes ;
 
-Bloco : '{' LCmd '}'
-      ;
+Decl : Tipo LId ';'  Decl
+     |     //produção vazia   
+     ;                     
 
-LCmd : LCmd  C
-     |       // vazio
+Tipo : INT 
+       | DOUBLE 
+       | BOOLEAN 
+       ;
+
+LId :  LId ',' ID
+       | ID
+       ;
+
+ListaFuncoes : ListaFuncoes Funcao
+       | //produçãoo vazia 
+       ;
+
+
+Funcao : TipoOuVoid ID '('ListaParametrosOuVazio ')' Bloco
+
+TipoOuVoid : VOID
+       | Tipo
+       ;
+
+ListaParametrosOuVazio : ListaParametros
+       | //produçãoo vazia 
+
+
+ListaParametros : Tipo ID 
+                  | Tipo ID ',' ListaParametros      
+
+Bloco :  '{' LCmd '}'            
+
+LCmd :  Cmd LCmd             
+       |     //produçãoo vazia
+       ;
+
+Cmd : Bloco
+       | IF '(' E ')' Cmd
+       | IF '(' E ')' Cmd ELSE Cmd
+       | WHILE '(' E ')' Cmd
+       |  E  
+       ;           
+
+E : E '=' E        
+     | E '+' E
+     | E '*' E   
+     | E '/' E   
+     | E '>' E   
+     | E AND E       
+     | NUM
+     | ID 
+     | '(' E ')'
      ;
-
-C : ident '=' E ';'
-  | IF '(' E ')' THEN C endif
-  | IF '(' E ')' THEN C ELSE C endif  
-  ;
-
-
-E : E '+' E
-  | E '-' E
-  | E '*' E 
-  | E '/' E
-  | num
-  | ident
-;
 
 
 %%
